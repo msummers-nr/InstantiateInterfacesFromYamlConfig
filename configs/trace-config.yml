@@ -1,0 +1,6 @@
+# https://zhwt.github.io/yaml-to-go/
+Tests:
+  - MTAgent:
+      Smtp: "SMTP Processor"
+    TestAgent:
+      MSGraph: "MSGraph Processor"
