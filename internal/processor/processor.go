@@ -5,6 +5,7 @@ import (
    "gopkg.in/yaml.v3"
 )
 
+// MailProcessor the type we want to unmarshal
 type MailProcessor interface {
    Read()
    Send()
@@ -14,6 +15,7 @@ type Processor struct {
    MailProcessor MailProcessor
 }
 
+// Kind Type-safe "Kind"
 type Kind string
 
 const (
@@ -24,15 +26,18 @@ const (
 var constructors = make(map[Kind]func() interface{}, 10)
 var casts = make(map[Kind]func(interface{}) MailProcessor, 10)
 
+// Register the constructor and cast by Kind
 func Register(k Kind, f func() interface{}, c func(interface{}) MailProcessor) {
    constructors[k] = f
    casts[k] = c
 }
 
+// TypeDef makes it simple to get the Kind
 type TypeDef struct {
    Kind Kind `yaml:"Kind"`
 }
 
+// UnmarshalYAML gives us the hook into the YAML process
 func (p *Processor) UnmarshalYAML(value *yaml.Node) (err error) {
    //  Decode into a temp struct to get the Kind
    td := &TypeDef{}
@@ -62,7 +67,7 @@ func (p *Processor) UnmarshalYAML(value *yaml.Node) (err error) {
 
    // Get an instance of the Kind
    tp := constructor()
-   // Decode into the Kind's instance
+   // Decode into the Kind's instance, this is an actual underlying struct
    err = value.Decode(tp)
    if err != nil {
       return

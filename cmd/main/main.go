@@ -2,7 +2,9 @@ package main
 
 import (
    "InstantiateInterfacesFromYamlConfig/internal/processor"
+   // Force the init function to run and avoid circular references
    _ "InstantiateInterfacesFromYamlConfig/internal/processor/graph"
+   // Force the init function to run and avoid circular references
    _ "InstantiateInterfacesFromYamlConfig/internal/processor/smtp"
    "gopkg.in/yaml.v3"
    "os"
